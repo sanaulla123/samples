@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Mustache Demo</title>
+        <link rel="stylesheet" type="text/css" 
+            href="https://bootswatch.com/bower_components/bootstrap/dist/css/bootstrap.min.css" />
+        <script src="https://use.fontawesome.com/e344ad35b2.js"></script>
+        <style type="text/css">
+            .git-user-avatar {
+                width: 100px;
+                height: 100px;
+            }
+            .center{
+                text-align: center;
+                padding-top: 5px;
+            }
+            .space{
+                margin-top: 10px;
+            }
+            .git-stars{
+                color: goldenrodyellow;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="page-header"><h1>Mustache Demo</h1></div>
+            <div class="row">
+                <div class="col-md-offset-3 col-md-6">
+                    <h3>Select user</h3>
+                    <select id="git-users" class="form-control">
+                        <option value=""></option>
+                        <option value="facebook">Facebook</option>
+                        <option value="google">Google</option>
+                        <option value="netflix">Netflix</option>
+                        <option value="flipkart">Flipkart</option>
+                        <option value="amzn">Amazon</option>
+                        <option value="microsoft">Microsoft</option>
+                    </select>
+                </div>
+            </div>
+            <div class="space"></div>
+            <div class="row">
+                <div class="col-md-offset-3 col-md-6" id="git-user-detail">
+                </div>
+            </div>
+            <div class="space"></div>
+            <div class="row">
+                <div class="col-md-offset-3 col-md-6" id="git-user-repos">
+                </div>
+            </div>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://bootswatch.classom/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
+
+        <script type="text/html" id="loading-template">
+            <div class="alert alert-info center">
+                <i class="fa fa-spinner fa-spin"></i> Loading ...
+            </div>
+        </script>
+
+        <script type="text/html" id="git-user-detail-template">
+            <div class="center">
+                <img src="{{avatar_url}}" class="git-user-avatar" />
+                <div class="space"></div>
+                Github User <a href="{{html_url}}">{{login}}</a>
+                <div class="space"></div>
+                Name <a href="{{blog}}">{{name}}</a>
+                {{#bio}}
+                <div class="space"></div>
+                {{bio}}
+                {{/bio}}
+            </div>
+        </script>
+        <script type="text/html" id="git-user-repos-template">
+            <ul class="list-group">
+                {{#items}}
+                <li class="list-group-item">
+                    <span class="badge">
+                        <i class="fa fa-star git-stars"></i> {{stargazers_count}}
+                    </span>
+                    <a href="{{html_url}}">{{full_name}}</a>
+                </li>
+                {{/items}}
+            </ul>
+        </script>
+        <script type="text/javascript">
+            $(function() {
+                $("#git-users").on('change', function(){
+                    var username = $(this).val();
+                    getUserDetail(username);
+                    getMostStarredRepos(username);
+                });
+            });
+
+            function getUserDetail(username){
+                loading("#git-user-detail");
+                $.getJSON('https://api.github.com/users/'+username, function(data){
+                    var html = Mustache.to_html($("#git-user-detail-template").html(), data);
+                    $("#git-user-detail").html(html);
+                });
+            }
+
+            function getMostStarredRepos(username){
+                loading("#git-user-repos");
+                $.getJSON('https://api.github.com/search/repositories?q=user:'
+                    +username+'&sort=stars&per_page=10', function(data){
+                    $("#git-user-repos").html(Mustache.to_html(
+                        $("#git-user-repos-template").html(), data));
+                });
+            }
+
+            function loading(target){
+                $(target).html(Mustache.to_html($("#loading-template").html(), {}));
+            }
+        </script>
+    </body>
+</html>
