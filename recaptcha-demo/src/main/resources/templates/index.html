@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>reCaptcha Demo</title>
+        <link rel="stylesheet" type="text/css" 
+            href="https://bootswatch.com/4/cerulean/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css"
+        	href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+        <script src="https://use.fontawesome.com/e344ad35b2.js"></script>
+        <style type="text/css">
+            .space{
+                margin-top: 10px;
+            }
+           
+        </style>
+        <script src='https://www.google.com/recaptcha/api.js'></script>
+    </head>
+    <body>
+		<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+			<a class="navbar-brand" href="#">Demo</a>
+		</nav>
+		<div class="container">
+            <div class="page-header"><h1>reCaptcha Demo</h1></div>
+            <div class="row">
+                <div class="col-md-6">
+                	<h2>New User</h2>
+                	<form id="signup-form" class="form-horizontal" method="POST" 
+                		th:action="@{/api/signup}" th:object="${user}">
+                		<div class="form-group">
+                			<label class="control-label required">First Name</label>
+                			<input type="text" th:field="*{firstName}" 
+                				class="form-control required" />
+                		</div>
+                		<div class="form-group">
+                			<label class="control-label required">Last Name</label>
+                			<input type="text" th:field="*{lastName}" 
+                				class="form-control required" />
+                		</div>
+                		<div class="form-group">
+                			<label class="control-label required">Email</label>
+                			<input type="text" th:field="*{email}" 
+                				class="form-control required" />
+                		</div>
+                		<div class="form-group">
+                			<label class="control-label required">Password</label>
+                			<input type="password" th:field="*{password}" 
+                				class="form-control required" />
+                		</div>
+                		<div class="form-group">
+                			<label class="control-label required">Confirm Password</label>
+                			<input type="password" th:field="*{confirmPassword}" 
+                				class="form-control required" />
+                		</div>
+                		<div class="form-group">
+                			<div class="g-recaptcha" data-sitekey="6LdGeDcUAAAAALfoMZ2Ltv4EE6AHIYb8nSxhCRh_"></div>
+                		</div>
+                		<button type="submit" class="btn btn-primary">Submit</button>
+                	</form>
+                </div>
+                <div class="col-md-6">
+                	<h2>Users</h2>
+                	<div class="row">
+                		<div class="col-md-12">
+                			<table class="table">
+                				<thead>
+                					<tr>
+                						<th>First Name</th>
+                						<th>Last Name</th>
+                						<th>Email</th>
+                					</tr>
+                				</thead>
+                				<tbody id="users-list">
+                					<tr>
+                						<td colspan="3">
+                							<div class="alert alert-info">
+                								<i class="fa fa-spinner fa-spin"></i> Loading...
+                							</div>
+                						</td>
+                					</tr>
+                				</tbody>
+                			</table>
+                		</div>
+                	</div>
+                </div>
+            </div>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/jquery.validate.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/additional-methods.min.js"></script>
+        <script src="http://malsup.github.io/min/jquery.form.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
+        <script src="/js/index.js"></script>
+        
+        <script type="text/html" id="users-list-template">
+			{{#.}}
+			<tr>
+				<td>{{firstName}}</td>
+				<td>{{lastName}}</td>
+				<td>{{email}}</td>
+			</tr>
+			{{/.}}
+			{{^.}}
+			<tr>
+				<div class="alert alert-info">No users found</div>
+			</tr>
+			{{/.}}
+		</script>
+    </body>
+</html>
