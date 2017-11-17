@@ -1,5 +1,10 @@
 package info.sanaulla.sample;
 
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRegistration;
+
+import org.h2.server.web.WebServlet;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 public class WebApplicationInitializer 
@@ -19,14 +24,15 @@ public class WebApplicationInitializer
 	protected String[] getServletMappings() {
 		return new String[] { "/" };
 	}
-/*	
+
 	@Override
-	protected void registerDispatcherServlet(ServletContext servletContext) {
-		super.registerDispatcherServlet(servletContext);
+	public void onStartup(ServletContext servletContext) 
+			throws ServletException {
+		super.onStartup(servletContext);
 		ServletRegistration.Dynamic servlet = servletContext.addServlet(
 				"h2-console", new WebServlet());
-		servlet.setLoadOnStartup(1);
-		servlet.addMapping("/h2-console");
-	}*/
+		servlet.setLoadOnStartup(2);
+		servlet.addMapping("/console/*");
+	}
 
 }
