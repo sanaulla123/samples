@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<link rel="stylesheet" href="https://bootswatch.com/4/cerulean/bootstrap.min.css" />
+	</head>
+	<body>
+		<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+			<a class="navbar-brand" href="#">Spring on Tomcat</a>
+		</nav>
+		<div class="container">
+            <div class="page-header"><h1>Spring on Tomcat</h1></div>
+            <div class="row">
+            	<div class="col">
+					<ul class="list-group">
+						<li class="list-group-item" th:each="p : ${persons}">
+							[[${p.firstName}]] [[${p.lastName}]], 
+							Date Of Birth: [[${#dates.format(p.dateOfBirth, 'dd/MMM/yyyy')}]]
+							Place: [[${p.placeOfBirth}]]
+						</li>
+					</ul>
+            	</div>
+            </div>
+		</div>
+		<script src="https://bootswatch.com/_vendor/jquery/dist/jquery.min.js"></script>
+		<script src="https://bootswatch.com/_vendor/popper.js/dist/umd/popper.min.js"></script>
+		<script src="https://bootswatch.com/_vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+	</body>
+</html>
