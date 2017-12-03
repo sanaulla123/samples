@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" 
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{template}">
+
+<head>
+	<title>Countries</title>
+</head>
+
+<div layout:fragment="page_content" id="page_content">
+	<h1 class="page-header">Countries</h1>
+	<div class="row justify-content-md-center">
+		<div class="col-md-6 input-group">
+			<input type="text" class="filter form-control" id="search_f"
+				th:value="${param.search}" name="search" placeholder="Search by name" />
+			<button id="searchBtn" class="btn btn-primary btn-sm">
+				<i class="fa fa-search"></i> Search</button>
+		</div>
+	</div>
+	<br />
+	<div class="row" id="countries">
+		<div class="col">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>Code</th>
+						<th>Name</th>
+						<th>Continent</th>
+						<th>Region</th>
+						<th>Capital</th>
+					</tr>
+				</thead>
+				<tbody  v-if="countries.length">
+					<tr v-for="c in countries">
+						<td>{{ c.code }}</td>
+						<td>{{ c.name }}</td>
+						<td>{{ c.continent }}</td>
+						<td>{{ c.region }}</td>	
+						<td>{{ c.capital.name }}</td>
+						
+					</tr>
+				</tbody>
+			</table>
+			<div>
+				<span id="pagination"></span>
+			</div>
+		
+		</div>
+	</div>
+</div>
+<th:block layout:fragment="scripts">
+	<script type="text/javascript">
+	
+		$(function(){
+			var vm = new Vue({
+				el: "#countries",
+				data: {
+					countries: []
+				}
+			});
+			
+			$.getJSON("/api/countries", function(remote){
+				vm.countries = remote.content;
+			});
+			
+			
+			/* $('#pagination').bootpag({				
+			    total: Math.ceil(count/pageSize),
+			    page: queryString['pageNo']?queryString['pageNo'] : 1 ,
+			    maxVisible: 5,
+			    leaps: true
+			}).on("page", function(event, num){
+			    //list(num); 
+				queryString['pageNo'] = num;
+				console.log(queryString);
+				console.log( $.param( queryString ));
+				reloadPage();
+			}); */
+		});
+	</script>
+</th:block>
+</html>
