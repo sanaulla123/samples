@@ -14,11 +14,12 @@ import info.sanaulla.repos.CountryRepository;
 @RestController
 @RequestMapping("/api")
 public class APIController {
-
-	@Autowired CountryRepository countryRepo;
 	
+	@Autowired CountryRepository countryRepo;
+
 	@GetMapping("/countries")
-	public Page<Country> getCountries(Pageable pageable, @RequestParam(name="search", required=false, defaultValue="") String search){
+	public Page<Country> getCountries(Pageable pageable, 
+		@RequestParam(name="search", required=false, defaultValue="") String search){
 		return countryRepo.findByNameContainingOrderByCode(search, pageable);
 	}
 }

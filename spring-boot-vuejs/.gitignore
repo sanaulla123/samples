@@ -1,6 +1,7 @@
 target/
 !.mvn/wrapper/maven-wrapper.jar
-
+.vscode
+.sts4-cache
 ### STS ###
 .apt_generated
 .classpath

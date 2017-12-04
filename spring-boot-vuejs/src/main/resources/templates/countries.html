@@ -17,8 +17,9 @@
 		<div class="row justify-content-md-center">
 			<div class="col-md-6 input-group">
 				<input type="text" class="filter form-control" id="search_f"
-					th:value="${param.search}" name="search" placeholder="Search by name" />
-				<button id="searchBtn" class="btn btn-primary btn-sm" v-once>
+					v-model:value="search" name="search" placeholder="Search by name" />
+				<button id="searchBtn" class="btn btn-primary btn-sm" 
+					v-once v-on:click="searchData">
 					<i class="fa fa-search"></i> Search</button>
 			</div>
 		</div>
@@ -50,17 +51,10 @@
 							
 						</tr>
 					</tbody>
-					<!-- <tbody v-else v-cloak>
-						<tr>
-							<td colspan="5">
-								<div class="alert alert-info">No data found</div>
-							</td>
-						</tr>
-					</tbody> -->
 				</table>
 				<div>
-					<pagination :total="remote.totalPages" :current="remote.number + 1" :maxvisible="maxVisible"
-						:callback="paginationCallback"></pagination>
+					<pagination :total="remote.totalPages" :current="currentPage" 
+						:maxvisible="maxVisible" :callback="paginationCallback"></pagination>
 				</div>
 			
 			</div>
@@ -68,7 +62,7 @@
 	</div>
 </div>
 <th:block layout:fragment="scripts">
-	<script type="text/html" id="pagination-template">
+	<script type="text/x-template" id="pagination-template">
 		<nav aria-label="Page navigation example">
 		  <ul class="pagination">
 			<li class="page-item" :class="{disabled: disablePrev}">
@@ -89,7 +83,7 @@
 	<script type="text/javascript">
 		var vm;
 		Vue.component('pagination', {
-		  template: $("#pagination-template").html(),
+		  template: '#pagination-template',
 		  props: ["total", "current", "callback", "maxvisible"],
 		  data: function(){
 			  return {
@@ -132,18 +126,26 @@
 		
 		$(function(){
 			vm = new Vue({
-				el: "#countries",
-				created(){
-					getCountries(1);
+				mounted: function(){
+					this.$nextTick(function () {
+						getCountries();
+					});
 				},
+				el: "#countries",
 				data: {
 					remote: {},
 					loading: true,
-					maxVisible: 5
+					maxVisible: 5,
+					search: "",
+					currentPage: 1
 				},
 				methods:{
 					paginationCallback: function(page){
-						getCountries(page);
+						this.currentPage = page;
+						getCountries();
+					},
+					searchData: function(){
+						getCountries();
 					}
 				}
 			});
@@ -153,10 +155,12 @@
 			
 		});
 		
-		function getCountries(page, callback){
-			var params = {size: 2};
-			if ( page ){
-				params['page'] = page - 1;	
+		function getCountries(){
+			var params = {size: 10};
+			console.log(vm);
+			params['page'] = vm.currentPage - 1;
+			if ( vm.search ){
+				params['search'] = vm.search;
 			}
 			
 			$.getJSON("/api/countries", params, function(remote){
