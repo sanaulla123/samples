@@ -1,10 +1,11 @@
 package info.sanaulla.repos;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.querydsl.QueryDslPredicateExecutor;
 
 import info.sanaulla.model.Country;
 
 public interface CountryRepository extends JpaRepository<Country, String>{
-
+	public Page<Country> findByNameContainingOrderByCode(String name, Pageable pageable);
 }

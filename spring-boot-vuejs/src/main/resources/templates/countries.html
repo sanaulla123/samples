@@ -4,78 +4,129 @@
 
 <head>
 	<title>Countries</title>
+	<style>
+		[v-cloak] {
+			display: none;
+		}
+	</style>
 </head>
 
 <div layout:fragment="page_content" id="page_content">
 	<h1 class="page-header">Countries</h1>
-	<div class="row justify-content-md-center">
-		<div class="col-md-6 input-group">
-			<input type="text" class="filter form-control" id="search_f"
-				th:value="${param.search}" name="search" placeholder="Search by name" />
-			<button id="searchBtn" class="btn btn-primary btn-sm">
-				<i class="fa fa-search"></i> Search</button>
-		</div>
-	</div>
-	<br />
-	<div class="row" id="countries">
-		<div class="col">
-			<table class="table table-striped">
-				<thead>
-					<tr>
-						<th>Code</th>
-						<th>Name</th>
-						<th>Continent</th>
-						<th>Region</th>
-						<th>Capital</th>
-					</tr>
-				</thead>
-				<tbody  v-if="countries.length">
-					<tr v-for="c in countries">
-						<td>{{ c.code }}</td>
-						<td>{{ c.name }}</td>
-						<td>{{ c.continent }}</td>
-						<td>{{ c.region }}</td>	
-						<td>{{ c.capital.name }}</td>
-						
-					</tr>
-				</tbody>
-			</table>
-			<div>
-				<span id="pagination"></span>
+	<div id="countries">
+		<div class="row justify-content-md-center">
+			<div class="col-md-6 input-group">
+				<input type="text" class="filter form-control" id="search_f"
+					th:value="${param.search}" name="search" placeholder="Search by name" />
+				<button id="searchBtn" class="btn btn-primary btn-sm" v-once>
+					<i class="fa fa-search"></i> Search</button>
 			</div>
-		
+		</div>
+		<br />
+		<div class="row">
+			<div class="col">
+				<table class="table table-striped">
+					<thead v-once>
+						<tr>
+							<th width="5%">Code</th>
+							<th>Name</th>
+							<th width="15%">Continent</th>
+							<th width="20%">Region</th>
+							<th width="15%">Capital</th>
+						</tr>
+					</thead>
+					<tbody  v-cloak>
+						<tr v-if="loading">
+							<td colspan="5">
+								<div class="alert alert-info"><i class="fa fa-spinner fa-spin"></i> Loading data ...</div>
+							</td>
+						</tr>
+						<tr v-for="c in remote.content" :key="c.code" v-else>
+							<td>{{ c.code }}</td>
+							<td>{{ c.name }}</td>
+							<td>{{ c.continent }}</td>
+							<td>{{ c.region }}</td>	
+							<td><span v-if="c.capital">{{ c.capital.name }}</span></td>
+							
+						</tr>
+					</tbody>
+					<!-- <tbody v-else v-cloak>
+						<tr>
+							<td colspan="5">
+								<div class="alert alert-info">No data found</div>
+							</td>
+						</tr>
+					</tbody> -->
+				</table>
+				<div>
+					<pagination :total="remote.totalPages" :current="remote.number + 1"
+						:callback="paginationCallback"></pagination>
+				</div>
+			
+			</div>
 		</div>
 	</div>
 </div>
 <th:block layout:fragment="scripts">
-	<script type="text/javascript">
+	<script type="text/html" id="pagination-template">
+		<nav aria-label="Page navigation example">
+		  <ul class="pagination">
+			<li class="page-item" :class="{disabled: (current == 1)}">
+				<a class="page-link" href="javascript:void(0);"
+					v-on:click="callback(current - 1)">Previous</a>
+			</li>
+			<li class="page-item" :class="{ active: (p == current)}" v-for="p in total">
+				<a class="page-link" href="javascript:void(0);" 
+					v-on:click="callback(p)">{{ p }}</a>
+			</li>
+			<li class="page-item" :class="{disabled: (current == total)}"><a class="page-link" href="#">Next</a></li>
+		  </ul>
+		</nav>
+	</script>
 	
+	<script type="text/javascript">
+		var vm;
+		Vue.component('pagination', {
+		  template: $("#pagination-template").html(),
+		  props: ["total", "current", "callback"]
+		
+		});
+		
 		$(function(){
-			var vm = new Vue({
+			vm = new Vue({
 				el: "#countries",
+				created(){
+					getCountries(1);
+				},
 				data: {
-					countries: []
+					remote: {},
+					loading: true
+				},
+				methods:{
+					paginationCallback: function(page){
+						console.log(page);
+						getCountries(page);
+					}
 				}
 			});
 			
-			$.getJSON("/api/countries", function(remote){
-				vm.countries = remote.content;
+			
+			
+			
+		});
+		
+		function getCountries(page, callback){
+			var params = {};
+			if ( page ){
+				params['page'] = page - 1;	
+			}
+			
+			$.getJSON("/api/countries", params, function(remote){
+				vm.remote = remote;
+				vm.loading = false;
 			});
 			
-			
-			/* $('#pagination').bootpag({				
-			    total: Math.ceil(count/pageSize),
-			    page: queryString['pageNo']?queryString['pageNo'] : 1 ,
-			    maxVisible: 5,
-			    leaps: true
-			}).on("page", function(event, num){
-			    //list(num); 
-				queryString['pageNo'] = num;
-				console.log(queryString);
-				console.log( $.param( queryString ));
-				reloadPage();
-			}); */
-		});
+		}
 	</script>
 </th:block>
 </html>
