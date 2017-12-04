@@ -59,7 +59,7 @@
 					</tbody> -->
 				</table>
 				<div>
-					<pagination :total="remote.totalPages" :current="remote.number + 1"
+					<pagination :total="remote.totalPages" :current="remote.number + 1" :maxvisible="maxVisible"
 						:callback="paginationCallback"></pagination>
 				</div>
 			
@@ -75,7 +75,7 @@
 				<a class="page-link" href="javascript:void(0);"
 					v-on:click="callback(current - 1)">Previous</a>
 			</li>
-			<li class="page-item" :class="{ active: (p == current)}" v-for="p in total">
+			<li class="page-item" :class="{ active: (p == current)}" v-for="p in maxvisible">
 				<a class="page-link" href="javascript:void(0);" 
 					v-on:click="callback(p)">{{ p }}</a>
 			</li>
@@ -88,7 +88,7 @@
 		var vm;
 		Vue.component('pagination', {
 		  template: $("#pagination-template").html(),
-		  props: ["total", "current", "callback"]
+		  props: ["total", "current", "callback", "maxvisible"]
 		
 		});
 		
@@ -100,11 +100,11 @@
 				},
 				data: {
 					remote: {},
-					loading: true
+					loading: true,
+					maxVisible: 5
 				},
 				methods:{
 					paginationCallback: function(page){
-						console.log(page);
 						getCountries(page);
 					}
 				}
@@ -116,7 +116,7 @@
 		});
 		
 		function getCountries(page, callback){
-			var params = {};
+			var params = {size: 2};
 			if ( page ){
 				params['page'] = page - 1;	
 			}

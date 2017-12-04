@@ -24,7 +24,7 @@ public class Country {
 	private String region;
 	
 	@OneToOne()
-	@JoinColumn(name = "capital")
+	@JoinColumn(name = "capital" )
 	private City capital;
 	
 }
