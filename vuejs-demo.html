@@ -32,8 +32,7 @@
             <div class="row">
                 <div class="col-md-offset-3 col-md-6">
                     <h3>Select user</h3>
-                    <select id="git-users" class="form-control" v-model="gituser"
-                        v-on:change="loadDetail">
+                    <select id="git-users" class="form-control" v-model="gituser">
                         <option value=""></option>
                         <option value="facebook">Facebook</option>
                         <option value="google">Google</option>
@@ -47,32 +46,32 @@
             <div class="space"></div>
             <div class="row" v-cloak>
                 <div class="col-md-offset-3 col-md-6">
-                    <div class="alert alert-info center" v-if="(gituser == '')">
+                    <div class="alert alert-info center" v-if="!userSelected">
                         <i class="fa fa-exclamation-triangle"></i> Select a GitHub User
                     </div>
-                    <div v-if="(gituser != '')">
+                    <div v-if="userSelected">
                         <div class="center" >
                                 
-                            <div class="alert alert-info" v-if="(gituser != '' && loadingDetail)">
+                            <div class="alert alert-info" v-if="loadingDetail">
                                 <i class="fa fa-spinner fa-spin"></i> Loading Detail...
                             </div>
-                            <div  v-if="(gituser != '' && !loadingDetail)">
+                            <div  v-if="!loadingDetail">
                                 <img :src="detail.avatar_url" class="git-user-avatar" />
                                 <div class="space"></div>
                                 Github User <a :href="detail.html_url">{{detail.login}}</a>
                                 <div class="space"></div>
                                 Name <a :href="detail.blog">{{detail.name}}</a>
-                                <div v-if="detail.bio != '' && detail.bio != null" class="space">
+                                <div v-if="isBio" class="space">
                                     {{detail.bio}}
                                 </div>
                             </div>
                         </div>
                         <div class="space"></div>
                         <div>
-                            <div class="alert alert-info" v-if="(gituser != '' && loadingRepos)">
+                            <div class="alert alert-info" v-if="loadingRepos">
                                 <i class="fa fa-spinner fa-spin"></i> Loading Repos...
                             </div>
-                            <ul class="list-group" v-if="(gituser != '' && !loadingRepos)">
+                            <ul class="list-group" v-if="!loadingRepos">
                                 <li class="list-group-item" v-for="item in repos.items">
                                     <span class="badge">
                                         <i class="fa fa-star git-stars"></i> {{item.stargazers_count}}
@@ -113,13 +112,21 @@
                         detail: {},
                         repos: {}
                     },
-                    methods: {
-                        loadDetail: function(){
+                    computed: {
+                        userSelected: function(){
+                            return this.gituser != '';
+                        },
+                        isBio: function(){
+                            return this.detail.bio != '' 
+                                && this.detail.bio != null;
+                        }
+                    },
+                    watch:{
+                        gituser: function(){
                             if ( this.gituser){
                                 getUserDetail(this.gituser);
                                 getMostStarredRepos(this.gituser);
                             }
-                            
                         }
                     }
                 });
