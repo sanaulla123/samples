@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="info.sanaulla.repos.CountryMapper">
+	<sql id="getCountries-where">
+		<where>
+			<if test="search != '' and search != null ">
+				lower(c.name) LIKE '%' || lower(#{search}) || '%'
+			</if>
+			<if test="continent != '' and continent != null">
+				AND c.continent = #{continent}
+			</if>
+			<if test="region != '' and region != null">
+				AND c.region = #{region}
+			</if>
+		</where>
+	</sql>
+	<select id="getCountries" resultType="info.sanaulla.model.Country" parameterType="map">
+		SELECT 
+			c.code,
+			c.name,
+			c.continent,
+			c.region,
+			
+			cy.id "capital.id",
+			cy.name "capital.name"
+		FROM country c
+		LEFT OUTER JOIN city cy ON cy.id = c.capital
+		<include refid="getCountries-where"></include>
+		ORDER BY c.code
+	</select>
+	
+	<select id="getCountriesCount" resultType="int" parameterType="map">
+		SELECT count(c.code) FROM country c
+		<include refid="getCountries-where"></include>
+	</select>
+</mapper>

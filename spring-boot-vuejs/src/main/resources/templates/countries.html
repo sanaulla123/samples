@@ -16,8 +16,8 @@
 	<div id="countries">
 		<div class="row justify-content-md-center">
 			<div class="col-md-6 input-group">
-				<input type="text" class="filter form-control" id="search_f"
-					v-model:value="search" name="search" placeholder="Search by name" />
+				<input type="text" class="filter form-control" id="search_f" name="search" 
+					placeholder="Search by name" v-model="search" />
 				<button id="searchBtn" class="btn btn-primary btn-sm" 
 					v-once v-on:click="searchData">
 					<i class="fa fa-search"></i> Search</button>
@@ -27,13 +27,32 @@
 		<div class="row">
 			<div class="col">
 				<table class="table table-striped">
-					<thead v-once>
-						<tr>
+					<thead>
+						<tr v-once>
 							<th width="5%">Code</th>
 							<th>Name</th>
 							<th width="15%">Continent</th>
 							<th width="20%">Region</th>
 							<th width="15%">Capital</th>
+						</tr>
+						<tr class="filters">
+							<td><!--  Code  --></td>
+							<td><!--  Name  --></td>
+							<td>
+								<!--  Continent  -->
+								<select class="form-control" v-model="filter.continent">
+									<option value=""></option>
+									<option th:each="c : ${continents}" th:value="${c}">[[${c}]]</option>
+								</select>
+							</td>
+							<td><!--  Region  -->
+								<select class="form-control" v-model="filter.region">
+									<option value=""></option>
+									<option th:each="r : ${regions}" th:value="${r}">[[${r}]]</option>
+								</select>
+							
+							</td>
+							<td><!--  Capital  --></td>
 						</tr>
 					</thead>
 					<tbody  v-cloak>
@@ -64,6 +83,7 @@
 <th:block layout:fragment="scripts">
 	<script type="text/x-template" id="pagination-template">
 		<nav aria-label="Page navigation example">
+			{{range}}
 		  <ul class="pagination">
 			<li class="page-item" :class="{disabled: disablePrev}">
 				<a class="page-link" href="javascript:void(0);"
@@ -87,11 +107,13 @@
 		  props: ["total", "current", "callback", "maxvisible"],
 		  data: function(){
 			  return {
-				  start: 1,
-				  end: this.maxvisible
+				  start: 1
 			  }
 		  },
 		  computed: {
+			  end: function(){
+				  return this.maxvisible >= this.total? this.total : this.maxvisible;
+			  },
 			  range: function(){
 				  return _.range(this.start, this.end + 1, 1);
 			  },
@@ -137,7 +159,16 @@
 					loading: true,
 					maxVisible: 5,
 					search: "",
-					currentPage: 1
+					currentPage: 1,
+					filter: {}
+				},
+				watch:{
+					'filter': {
+						handler: function(){
+							getCountries();								
+						},
+						deep: true
+					}
 				},
 				methods:{
 					paginationCallback: function(page){
@@ -156,8 +187,8 @@
 		});
 		
 		function getCountries(){
-			var params = {size: 10};
-			console.log(vm);
+			var params = vm.filter;
+			params['size'] = 10;
 			params['page'] = vm.currentPage - 1;
 			if ( vm.search ){
 				params['search'] = vm.search;
