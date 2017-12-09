@@ -83,7 +83,6 @@
 <th:block layout:fragment="scripts">
 	<script type="text/x-template" id="pagination-template">
 		<nav aria-label="Page navigation example">
-			{{range}}
 		  <ul class="pagination">
 			<li class="page-item" :class="{disabled: disablePrev}">
 				<a class="page-link" href="javascript:void(0);"
@@ -107,13 +106,11 @@
 		  props: ["total", "current", "callback", "maxvisible"],
 		  data: function(){
 			  return {
-				  start: 1
+				  start: 1,
+				  end: this.maxvisible >= this.total? this.total : this.maxvisible
 			  }
 		  },
 		  computed: {
-			  end: function(){
-				  return this.maxvisible >= this.total? this.total : this.maxvisible;
-			  },
 			  range: function(){
 				  return _.range(this.start, this.end + 1, 1);
 			  },

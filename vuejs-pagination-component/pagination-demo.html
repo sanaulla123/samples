@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Vuejs Demo</title>
+        <link rel="stylesheet" type="text/css" 
+            href="https://bootswatch.com/4/cerulean/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" 
+        	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+        <style type="text/css">
+            [v-cloak]{
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="page-header"><h1>Vuejs Pagination Component</h1></div>
+            <div class="row">
+                <div class="col-md-offset-3 col-md-6">
+                    <pagination :total="totalPages" :current="currentPage" 
+						:max-visible="maxVisible" :callback="paginationCallback"></pagination>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.4/lodash.min.js"></script>
+    <script src="https://vuejs.org/js/vue.js"></script>
+    <script src="pagination.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript">
+        $(function() {
+            vm = new Vue({
+                el: ".container",
+                data: {
+                    maxVisible: 5,
+                    totalPages: 10,
+                    currentPage: 3
+                },
+                methods:{
+                    paginationCallback: function(page){
+                        this.currentPage = page;
+                        alert("Showing page " + this.currentPage);
+                    }
+                }
+            });
+        });
+
+    </script>
+</html>

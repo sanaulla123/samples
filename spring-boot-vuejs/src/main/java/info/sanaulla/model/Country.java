@@ -39,7 +39,7 @@ public class Country {
 	private Integer indepyear;
 	private Integer population;
 	
-	@Column("lifeexpectancy")
+	@Column(name="lifeexpectancy")
 	private Double lifeExpectancy;
 	
 	@OneToOne()
