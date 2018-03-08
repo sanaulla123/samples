@@ -19,10 +19,10 @@ public class LegalLocalVarInferenceDemo{
         var name = "Mohamed Sanualla";
         System.out.println("Hello " + name);
 
-        var data = new ArrayList<>();
+        var data = new ArrayList<Map<String, String>>();
         data.add(Map.of("key1", "value1", "key2", "value2"));
         data.add(Map.of("key11", "value11", "key22", "value22"));
-        data.add("hello");
+        
         System.out.println(data);
 
         System.out.println("********** As iteration variable in enhanced for-loop ***************");
