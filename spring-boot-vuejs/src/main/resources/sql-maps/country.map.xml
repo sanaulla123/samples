@@ -31,6 +31,24 @@
 		ORDER BY c.code
 	</select>
 	
+	<select id="getCountriesSortedByLanguages" resultType="string">
+	
+		SELECT c.name, count(cl.language)
+		FROM country c
+		JOIN countrylanguage cl ON cl.countrycode = c.code
+		GROUP BY c.code
+		ORDER BY 2 DESC 
+	</select>
+	
+	<select id="getCountriesAsCustomMap" resultType="info.sanaulla.model.CustomMap">
+		SELECT 
+			c.code,
+			c.name,
+			c.continent,
+			c.region
+		FROM country c
+	</select>
+	
 	<select id="getCountriesCount" resultType="int" parameterType="map">
 		SELECT count(c.code) FROM country c
 		<include refid="getCountries-where"></include>

@@ -22,5 +22,7 @@ public interface CountryMapper{
 	
 	public Integer getCountriesCount(Map<String, Object> params);
 	
+	public List<Map<String, String>> getCountriesAsCustomMap();
 	
+	public List<String> getCountriesSortedByLanguages();
 }

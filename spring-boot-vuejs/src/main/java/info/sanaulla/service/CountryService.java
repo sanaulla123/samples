@@ -32,4 +32,12 @@ public class CountryService {
 	public Integer getCountriesCount(Map<String, Object> params){
 		return countryMapper.getCountriesCount(params);
 	}
+	
+	public List<Map<String, String>> getCountriesAsCustomMap(){
+		return countryMapper.getCountriesAsCustomMap();
+	}
+	
+	public List<String> getCountriesSortedByLanguages(){
+		return countryMapper.getCountriesSortedByLanguages();
+	}
 }
