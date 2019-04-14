@@ -47,5 +47,12 @@
 
     </dependencies>
 
+    <repositories>
+        <repository>
+            <id>mulesoft</id>
+            <url>https://repository.mulesoft.org/nexus/content/repositories/public/</url>
+        </repository>
+    </repositories>
+
 
 </project>

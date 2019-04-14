@@ -1,3 +1,5 @@
+*.class
+out/
 mods/
 target/
 !.mvn/wrapper/maven-wrapper.jar
