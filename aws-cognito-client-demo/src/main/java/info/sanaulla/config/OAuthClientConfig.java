@@ -9,6 +9,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 
+/**
+ * this class is required only if you want to override default OAuth 2 client integration provided by
+ * Spring Boot
+ */
 @Slf4j
 @Configuration
 public class OAuthClientConfig extends WebSecurityConfigurerAdapter {
