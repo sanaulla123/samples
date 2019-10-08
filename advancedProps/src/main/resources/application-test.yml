@@ -1,0 +1,9 @@
+spring:
+  profiles: org1
+app:
+  name: Test Org1
+---
+spring:
+  profiles: org2
+app:
+  name: Test Org2
