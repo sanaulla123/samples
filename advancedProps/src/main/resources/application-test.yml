@@ -1,5 +1,3 @@
-spring:
-  profiles: test
 app:
   name: Test
 ---
