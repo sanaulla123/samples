@@ -1,0 +1,40 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{template}">
+<div layout:fragment="container">
+    <h2>File Upload</h2>
+
+    <form class="form" id="file-upload-form" enctype="multipart/form-data">
+        <div class="form-group">
+            <label class="form-label required">Select File (multiple supported)</label>
+            <input type="file" multiple class="form-control required" id="uploaded-file" name="uploaded-file" />
+        </div>
+        <div>&nbsp;</div>
+        <button class="btn btn-primary" type="submit">Upload</button>
+    </form>
+</div>
+<th:block layout:fragment="scripts">
+    <script>
+        $(function (){
+            $("#file-upload-form").submit(function (){
+                $(this).ajaxSubmit({
+                    beforeSubmit: function (){
+                        return $('#file-upload-form').valid();
+                    },
+                    success: function(response){
+                        alert("Successfully uploaded the files");
+                    },
+                    error: function(response){
+                        console.log(response);
+                        alert(response.responseJSON.message);
+                    },
+                    url: '/api/files/upload',
+                    type: 'POST'
+                });
+                return false;
+            });
+        });
+    </script>
+</th:block>
+</html>
