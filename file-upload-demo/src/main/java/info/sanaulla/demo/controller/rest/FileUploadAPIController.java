@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -23,10 +24,10 @@ public class FileUploadAPIController {
 
     @PostMapping("/upload")
     public ResponseEntity<?> handleFileUpload(
-            @RequestParam("uploaded-file") List<MultipartFile> uploadedFiles)
+            @RequestParam("uploaded-file") List<CommonsMultipartFile> uploadedFiles)
         throws IOException {
         log.debug("Uploaded files size : {}", uploadedFiles.size());
-        fileService.copyFile(uploadedFiles);
+        fileService.copyFileUsingCommons(uploadedFiles);
         return ResponseEntity.ok().build();
     }
 }
