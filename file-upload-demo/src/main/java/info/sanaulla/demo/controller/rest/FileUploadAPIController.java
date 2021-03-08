@@ -24,10 +24,10 @@ public class FileUploadAPIController {
 
     @PostMapping("/upload")
     public ResponseEntity<?> handleFileUpload(
-            @RequestParam("uploaded-file") List<CommonsMultipartFile> uploadedFiles)
+            @RequestParam("uploaded-file") List<MultipartFile> uploadedFiles)
         throws IOException {
         log.debug("Uploaded files size : {}", uploadedFiles.size());
-        fileService.copyFileUsingCommons(uploadedFiles);
+        fileService.copyFile(uploadedFiles);
         return ResponseEntity.ok().build();
     }
 }
