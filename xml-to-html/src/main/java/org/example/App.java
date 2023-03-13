@@ -42,10 +42,10 @@ public class App
         System.out.println(arrayOutputStream.toString());
 
         //XLST 2
-        XsltTransformer xsltTransformer = xsltExecutable.load();
+        /*XsltTransformer xsltTransformer = xsltExecutable.load();
         xsltTransformer.setSource(streamSource);
         xsltTransformer.setDestination(byteArrayOutput);
-        xsltTransformer.transform();
+        xsltTransformer.transform();*/
 
 
     }
