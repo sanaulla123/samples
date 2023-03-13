@@ -17,11 +17,13 @@ public class App
     public static void main( String[] args ) throws SaxonApiException, FileNotFoundException {
         Processor processor = new Processor(false);
 
+        /*
+        //If you want to write the output to file
         FileOutputStream fileOutputStream = new FileOutputStream(new File("sample-html.html"));
         Serializer output = processor.newSerializer(fileOutputStream);
         output.setOutputProperty(Serializer.Property.INDENT, "yes");
         output.setOutputProperty(Serializer.Property.METHOD, "html");
-        output.setOutputProperty(Serializer.Property.OMIT_XML_DECLARATION, "yes");
+        output.setOutputProperty(Serializer.Property.OMIT_XML_DECLARATION, "yes");*/
 
 
 
