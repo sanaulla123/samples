@@ -29,6 +29,7 @@ public class App
 
         XsltCompiler xsltCompiler = processor.newXsltCompiler();
         InputStream xsltStream = ClassLoader.getSystemResourceAsStream("sample-xslt2.xsl");
+        xsltCompiler.setParameter(new QName("message"), new XdmAtomicValue("Hello world"));
         XsltExecutable xsltExecutable = xsltCompiler.compile(new StreamSource(xsltStream));
         Xslt30Transformer xsltTransformer30 = xsltExecutable.load30();
 

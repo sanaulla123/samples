@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:th="http://www.thymeleaf.org">
+<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xs='http://www.w3.org/2001/XMLSchema'
+                xmlns:th="http://www.thymeleaf.org">
     <xsl:output method="html" />
+    <xsl:param name="message" as="xs:string">Default</xsl:param>
     <xsl:template match="detail">
         <div class="row">
             <div class="col">
-                <h3>Details</h3>
+                <h3>Details --- <xsl:value-of select="$message" /> </h3>
                 <form class="form-view">
                     <div class="form-group row">
                         <label for="" class="col-12 col-sm-4 col-lg-3 col-xl-2 col-form-label">Brand</label>

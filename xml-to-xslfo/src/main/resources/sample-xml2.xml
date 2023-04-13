@@ -1,0 +1,31 @@
+<detail>
+    <product>
+        <detail>Socket</detail>
+        <brand>GM</brand>
+        <models>
+            <model>
+                <model-no>123</model-no>
+                <model-notes>Test</model-notes>
+            </model>
+            <model>
+                <model-no>34</model-no>
+                <model-notes>Test 2</model-notes>
+            </model>
+            <model>
+                <model-no>56</model-no>
+                <model-notes>Test 3</model-notes>
+            </model>
+            <model>
+                <model-no>23</model-no>
+                <model-notes>Test 4</model-notes>
+            </model>
+        </models>
+    </product>
+    <manufacturer>
+        <country>
+            <code>IN</code>
+            <name>India</name>
+        </country>
+        <name>Philips Industries Ltd</name>
+    </manufacturer>
+</detail>
